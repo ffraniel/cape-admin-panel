@@ -1,15 +1,35 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "../components/LoadingSpinner";
 import Error from "../components/Error";
 
 function Home() {
+  const [userList, setUserList] = useState(null);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
   const [error, setError] = useState(null);
   const [usersLength, setUsersLength] = useState(null);
 
   useEffect(() => {
-    //get data here
-    setUsersLength(82);
+    let storedPassword = window.localStorage.getItem("password");
+
+    setLoadingUsers(true);
+    fetch("https://playful-easy-damselfly.glitch.me/api/allusers", {
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + storedPassword,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUsersLength(data.users.length);
+        setUserList(data.users);
+        setLoadingUsers(false);
+      })
+      .catch((error) => {
+        console.log("error", error.message);
+        setError(error.message);
+        setLoadingUsers(false);
+      });
   }, []);
 
   return (
@@ -96,12 +116,21 @@ function Home() {
       <section className="mt-4 py-8 px-4">
         <h3 className="text-xl text-gray-700">
           Number of users: <span> </span>
-          <span className="text-grey-800">
-            <Link className="underline" to="/users">
-              {usersLength}
-            </Link>
-          </span>
+          {loadingUsers && (
+            <h3 className="text-green-500 font-bold">Loading</h3>
+          )}
+          {!loadingUsers && userList && (
+            <span className="text-grey-800">
+              <Link className="underline" to="/users">
+                {usersLength}
+              </Link>
+            </span>
+          )}
         </h3>
+
+        <div>
+          <h3 className="text-gray-800">Latest users added</h3>
+        </div>
       </section>
       <div classname="bg-blue-200">
         <Link
