@@ -91,9 +91,7 @@ function SidePanel({ setHasPassword }) {
             User List
           </NavLink>
         </li>
-
         <div className="rounded w-full h-1 my-2 bg-gradient-to-r from-blue-200 to-purple-300"></div>
-
         <li className="mt-1 mb-1 rounded text-gray-800 p-1 hover:bg-purple-300">
           <a href="https://app.graphcms.com/e88cdb83bdde4fa6be02a4790cd5870f/master">
             Graph CMS
@@ -107,7 +105,9 @@ function SidePanel({ setHasPassword }) {
         <li className="mt-1 mb-1 rounded text-gray-800 p-1 hover:bg-purple-300">
           <a href="https://mail.google.com/mail/u/1/#inbox">Gmail Inbox</a>
         </li>
+
         <div className="rounded w-full h-1 my-2 bg-gradient-to-r from-blue-200 to-purple-300"></div>
+
         <li className="mt-1 mb-1 rounded text-gray-800 p-1 hover:bg-purple-300">
           <button onClick={handleSignOut}>SIGN OUT</button>
         </li>

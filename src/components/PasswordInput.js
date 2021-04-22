@@ -13,6 +13,19 @@ const PasswordInput = ({ setHasPassword }) => {
     checkPassword();
   }
 
+  function handleEnter(e) {
+    if (e.code === "Enter") {
+      checkPassword();
+    }
+  }
+
+  function reset(e) {
+    e.preventDefault();
+    setLoading(false);
+    setPassword(false);
+    setError(false);
+  }
+
   function checkPassword() {
     return fetch("https://playful-easy-damselfly.glitch.me/api/password", {
       method: "POST",
@@ -26,9 +39,16 @@ const PasswordInput = ({ setHasPassword }) => {
         return res.json();
       })
       .then((res) => {
+        console.log("success: ", res);
         window.localStorage.setItem("password", password.toString());
         setHasPassword(true);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setLoading(false);
+        setPassword("");
+        setError("Incorrect password");
       });
   }
 
@@ -50,6 +70,7 @@ const PasswordInput = ({ setHasPassword }) => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            onKeyPress={handleEnter}
             autofocus="true"
           />
           <button
@@ -63,6 +84,12 @@ const PasswordInput = ({ setHasPassword }) => {
       {error && (
         <div className="m-auto bg-green-400 py-16 px-32 rounded">
           <Error error={error} />
+          <button
+            className="bg-gray-800 text-gray-300 hover:bg-gray-300 hover:text-gray-800 m-1 py-1 px-2 rounded"
+            onClick={reset}
+          >
+            Refresh
+          </button>
         </div>
       )}
     </div>
