@@ -44,7 +44,8 @@ const EditPopup = ({ editingUser, setEditingUser, refreshUsers }) => {
       .then((res) => {
         console.log(res);
         if (res.error) {
-          setError(res);
+          setLoading(false);
+          setError(res.error.message);
         } else {
           setSuccessInfo(res);
           setSuccess(true);
