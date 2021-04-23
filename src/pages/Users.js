@@ -74,7 +74,7 @@ function Users() {
   }
 
   return (
-    <div className="h-screen ml-16 pt-12">
+    <div className="ml-16 pt-12 pb-12 min-h-screen">
       {editingUser && (
         <EditPopup
           editingUser={editingUser}

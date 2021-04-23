@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 import Error from "../components/Error";
 
 function Home() {
   const [userList, setUserList] = useState(null);
   const [loadingUsers, setLoadingUsers] = useState(false);
-
   const [error, setError] = useState(null);
   const [usersLength, setUsersLength] = useState(null);
+  const [mostRecent, setMostRecent] = useState(null);
 
   useEffect(() => {
     let storedPassword = window.localStorage.getItem("password");
@@ -21,7 +22,12 @@ function Home() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setUsersLength(data.users.length);
+        let sorted = data.users.sort((a, b) => {
+          return a.metadata.creationTime > b.metadata.creationTime;
+        });
+        setUsersLength(sorted.length);
+        sorted.length = 5;
+        setMostRecent(sorted);
         setUserList(data.users);
         setLoadingUsers(false);
       })
@@ -33,7 +39,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="h-screen mx-16 pt-12">
+    <div className="mx-16 pt-12 pb-12 min-h-screen">
       <h2 className="text-3xl text-gray-700 font-bold py-2 my-2">
         CAPE Website Dashboard
       </h2>
@@ -130,6 +136,22 @@ function Home() {
 
         <div>
           <h3 className="text-gray-800">Latest users added</h3>
+          <ul className="rounded overflow-hidden my-2">
+            {loadingUsers && <LoadingSpinner />}
+            {!loadingUsers &&
+              mostRecent &&
+              mostRecent.map((user) => {
+                return (
+                  <li className="flex bg-gray-300 border-gray-300 py-3">
+                    <p className="flex-1 ml-4">{user.email}</p>
+                    <p className="ml-auto px-4 w-1/3">
+                      created:{" "}
+                      <span>{user.metadata.creationTime || " - "}</span>{" "}
+                    </p>
+                  </li>
+                );
+              })}
+          </ul>
         </div>
       </section>
       <div classname="bg-blue-200">
