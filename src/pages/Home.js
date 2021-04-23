@@ -140,9 +140,16 @@ function Home() {
             {loadingUsers && <LoadingSpinner />}
             {!loadingUsers &&
               mostRecent &&
-              mostRecent.map((user) => {
+              mostRecent.map((user, i) => {
+                let colourOptions = {
+                  0: "bg-red-400",
+                  1: "bg-red-300",
+                  2: "bg-red-200",
+                  3: "bg-red-100",
+                  4: "bg-red-50",
+                };
                 return (
-                  <li className="flex bg-gray-300 border-gray-300 py-3">
+                  <li className={`flex ${colourOptions[i]} py-3`}>
                     <p className="flex-1 ml-4">{user.email}</p>
                     <p className="ml-auto px-4 w-1/3">
                       created:{" "}
